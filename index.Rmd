@@ -1,0 +1,338 @@
+---
+title       : Καρκίνος του μαστού σε ακραίες ηλικίες
+subtitle    : (πολλά διαγράμματα και νούμερα)
+author      : Δρ Άρης Περπέρογλου
+job         : Lecturer in Statistics, University of Essex
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap,interactive,shiny}
+mode        : selfcontained # {standalone, draft}
+github: 
+  user: 
+  repo: 
+---
+
+## Σύνοψη 
+
+ * Η γενική εικόνα
+  - Επίπτωση στην Ευρώπη
+  - Θνησιμότητα στην Ευρώπη
+ * Παράγοντες κινδύνου
+ * Ηλικία και κίνδυνος εμφάνισης καρκίνου
+ * Ηλικία, καρκίνος του μαστού και επιβίωση
+ * Δυναμικά μοντέλα επιβίωσης
+
+---
+
+## Επίπτωση και θνησιμότητα στην Ευρώπη
+
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+dat <- read.csv("Women46.csv",header=TRUE)
+or <- order(dat$incidence)
+dat <- dat[or,]
+Col1 <- gvisBarChart(dat, xvar="country", yvar="incidence",                    
+                        options=list(legend = "none", width=450, height=600,
+                                     series="[{targetAxisIndex:0, 
+                                       color:'#de2d26'}]",
+                                     vAxes="[{title:'',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}, 
+                            {title:'',
+                             titleTextStyle: {color: 'red'},  
+                             textStyle:{color: 'red'},
+                             textPosition: 'out'}]",
+                                     hAxes="[{title:'Incidence per 100,000 women',
+                             textPosition: 'out'}]"
+                                   
+                                     ))                                           
+dat <- read.csv("Women46.csv",header=TRUE)
+or <- order(dat$mortality)
+dat <- dat[or,]
+Col2 <- gvisBarChart(dat, xvar="country", yvar="mortality",                    
+                        options=list(legend = "none", width=450, height=600,
+                                     series="[{targetAxisIndex:0, 
+                                       color:'#de2d26'}]",
+                                     vAxes="[{title:'',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}, 
+                            {title:'',
+                             titleTextStyle: {color: 'red'},  
+                             textStyle:{color: 'red'},
+                             textPosition: 'out'}]",
+                                     hAxes="[{title:'mortality per 100,000 women',
+                             textPosition: 'out'}]"
+                                   
+                                     ))    
+
+
+GT <- gvisMerge(Col1,Col2, horizontal=TRUE) 
+
+print(GT,tag= "chart")
+
+```
+
+
+---
+## Επίπτωση και θνησιμότητα
+![](europe.jpg)
+
+---
+## Παράγοντες κινδύνου
+
+
+ * Αναπαραγωγικό ιστορικό
+  - Ηλικία εμμηναρχής, Ηλικία πρώτης γέννας
+  - Θηλασμός, Ηλικία εμμηνόπαυσης
+ * Ενδογενείς ορμόνες
+ * Εξωγενείς ορμόνες
+ * Πυκνότητα μαστού
+ * Ιστορικό
+ * δίαιτα, άσκηση, κτλ
+ * Ηλικία
+
+---
+## Ηλικία ως παράγοντας κινδύνου εμφάνισης καρκίνου του μαστού
+
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+dat <- read.table("usabrca.txt",header=TRUE)
+names(dat) <- c("age","year","incidence")
+M1 <- gvisMotionChart(dat, idvar="age", timevar="year")
+
+print(M1,tag= "chart")
+
+```
+
+---
+## Κίνδυνος εμφάνισης καρκίνου του μαστού  
+
+| κινδυνος ως την  | 2008 (Αγγλια)|
+| ------------- |-------------:|
+| ηλικία 29 | 1 στις 2000|
+| ηλικία 39 | 1 στις 215 |
+| ηλικία 49 | 1 στις 50 |
+| ηλικία 59 | 1 στις 22 |
+| ηλικία 69 | 1 στις 13 |
+| συνολικός | 1 στις 8  |
+
+---
+--- 
+## Επιβίωση γυναικών με καρκίνο του μαστού
+
+---
+##  Πενταετής επιβίωση στην Αγγλία 
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+year <- c("1971-1975","1976-1980","1981-1985","1986-1990","1991-1995","1996-2000","2001-2003","2005-2009")
+survival <- c(82, 85,87,89.1,91.1,93.4,94.5,95.8)
+dat <- data.frame(year=year, survival=survival)
+Col2 <- gvisColumnChart(dat, xvar="year", yvar="survival",                    
+                        options=list(title = "5 year survival rate per diagnosis period", 
+                                     titleTextStyle="{color:'#3182bd', fontSize:15}",legend="none",
+                                     width=450, height=600,
+                                     series="[{targetAxisIndex:0, 
+                                     color:'#756bb1'}]",
+                                     vAxes="[{title:'Survival %',
+                                     titleTextStyle: {color: '#3182bd'},
+                                     textStyle:{color: '#3182bd'},
+                                     textPosition: 'out', minValue:0}, 
+{title:'Five year survival rate',
+                                     titleTextStyle: {color: 'red'},  
+                                     textStyle:{color: 'red'},
+                                     textPosition: 'out',}]",
+                                     hAxes="[{title:'Date',
+                                     titleTextStyle: {color: '#3182bd'},
+                                     textStyle:{color: '#3182bd'},
+                                     textPosition: 'out'}]",
+                                     width=950, height=500
+                                     
+                        ))                                           
+
+age <- c("15-39","40-49","50-59","60-69","70-79","80-99")
+survival <- c(83.5,89.1,90.4,90.1,80.9,68.5)
+dat <- data.frame(age=age, survival=survival)
+Col3 <- gvisColumnChart(dat, xvar="age", yvar="survival",                    
+                        options=list(title = "5 year survival rate per age-group", 
+                                     titleTextStyle="{color:'#3182bd', fontSize:15}",legend="none",
+                                     width=450, height=600,
+                                     series="[{targetAxisIndex:0, 
+                                     color:'#756bb1'}]",
+                                     vAxes="[{title:'Survival %',
+                                     titleTextStyle: {color: '#3182bd'},
+                                     textStyle:{color: '#3182bd'},
+                                     textPosition: 'out', minValue:0}, 
+{title:'Five year survival rate',
+                                     titleTextStyle: {color: 'red'},  
+                                     textStyle:{color: 'red'},
+                                     textPosition: 'out',}]",
+                                     hAxes="[{title:'Age group',
+                                     titleTextStyle: {color: '#3182bd'},
+                                     textStyle:{color: '#3182bd'},
+                                     textPosition: 'out'}]"        
+                        ))                                           
+
+GT <- gvisMerge(Col2,Col3, horizontal=TRUE) 
+print(GT,tag= "chart")
+```
+---
+
+## H εμπειρία του ΙΑΣΩ
+# Δεδομένα 
+
+* Διάγνωση από το 1980 ως το 2000
+* 2433 γυναίκες με καρκίνο του μαστού 
+* 602 θάνατοι κατά τη διάρκεια παρακολούθησης
+* Χαρακτηριστικά όγκων 
+  - Τ1 : 47.47%, Τ2: 40.94%, Τ3: 11.55%
+  - grade I:13.6%, grade II: 60.42%, grade III: 25.98% 
+  - αρνητικούς λεμφαδένες: 46.73%, θετικους λεμφαδένες: 53.27%
+* Θεραπεία
+  - χημειοθεραπεία: 57.75%
+  - ακτινοβολία: 74.56% 
+  - ορμονοθεραπεία: 74.39%
+
+--- 
+## Κατανομή ανά ηλικία
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+dat <- read.table("iaso.dat",header=TRUE)
+j1 <- names(table( cut(dat$age,breaks=seq(20,100,by=10))))
+j2 <-table( cut(dat$age,breaks=seq(20,100,by=10)))
+dd <- data.frame(age=j1,num=j2)
+L1 <- gvisBarChart(dd,xvar="age",yvar="num.Freq",
+                     options=list(title = "",legend="none",
+                                  series="[{targetAxisIndex:0, 
+                                       color:'#756bb1'}]",
+                                 vAxes="[{title:'Age group',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}]",   
+                                  hAxes="[{title:'Number of Women',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}]",
+width=750, height=480                                  
+                     ))                                          
+
+print(L1,tag= "chart")
+```
+
+---
+
+
+## Διάγραμμα επιβίωσης
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+require(survival)
+dat <- read.table("iaso.dat",header=TRUE)
+ age1 <- (dat$age/100)^(-1)
+ age2 <- (dat$age/100)^(-.5)
+fit <- coxph(Surv(time/12,death)~age1+age2,data=dat)
+age <- seq(25,85,by=20)
+surv <- NULL
+for (i in 1:length(age)){
+svf <-survfit(fit,conf.int=FALSE,newdata=data.frame(age1=(age[i]/100)^(-1),age2=(age[i]/100)^(-0.5))) 
+surv <- cbind(surv,100*round(svf$surv,2))}
+tim <- round(svf$time,1)
+dat2 <- data.frame(time=svf$time,surv)
+names(dat2) <- c("time","25","45","65","85")
+
+L1 <- gvisLineChart(dat2, xvar="time", yvar=c("25","45","65","85"),
+                    options=list(title = "Overal survival per age-group", 
+ titleTextStyle="{color:'#3182bd', fontSize:15}",
+                                  vAxes="[{title:'Survival %',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out', minValue:0}]",   
+                                  hAxes="[{title:'Time in years',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}]",
+width=750, height=480                                  
+                     ))                                           
+
+
+
+print(L1,tag= "chart")
+```
+
+---
+# 5-ετής και 10-ετής επιβίωση ανά ηλικία
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+require(survival)
+dat <- read.table("iaso.dat",header=TRUE)
+ age1 <- (dat$age/100)^(-1)
+ age2 <- (dat$age/100)^(-.5)
+      fit <- coxph(Surv(time/12,death)~age1+age2,data=dat)
+      svf <-survfit(fit,conf.int=FALSE, newdata=data.frame(age1=(dat$age/100)^(-1),age2=(dat$age/100)^(-0.5))) 
+        x <- seq(25,85,by=10)
+      Surv5 <- rep(10,7)
+     Surv10 <- rep(10,7)
+     for(i in 1:7){
+        jj <- summary(survfit(fit,newdata=data.frame(age1=(x[i]/100)^(-1),age2=(x[i]/100)^(-0.5))))
+       Surv5[i] <- 100*round(jj$surv[max(which(jj$time<5.1))],3)
+       Surv10[i] <- 100*round( jj$surv[max(which(jj$time<10.1))],3)}
+
+dd <- data.frame(age=x,Surv5=Surv5,Surv10=Surv10)
+L1 <- gvisColumnChart(dd,xvar="age",yvar=c("Surv5","Surv10"),
+                     options=list(title = "",legend="none",
+                                  series="[{targetAxisIndex:0, 
+                                       color:'#756bb1'}]",
+                                 vAxes="[{title:'Survival %',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out', minValue:0}]",   
+                                  hAxes="[{title:'Age group',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}]",
+width=750, height=480                                  
+                     ))   
+print(L1,tag= "chart")
+```
+
+---
+## Η ερώτηση του ενός εκατομμυρίου
+> * Στις 22 Μαρτίου 2008 μια ασθενής 25 ετών ρωτάει: 
+> * Ιατρέ, ποιά είναι η πιθανότητα επιβίωσης για τα επόμενα 5 χρόνια;
+> * Στις 22 Μαρτίου 2012 η ίδια  ασθενής 25 ετών ρωτάει την ίδια ερώτηση:    
+> * Ιατρέ, ποιά είναι η πιθανότητα επιβίωσης για τα επόμενα 5 χρόνια;
+>  * Η απάντηση αυτή πρέπει να ανανεώνεται με βάση το πόσα χρόνια μια ασθενής έχει     ήδη επιβιώσει χωρίς σημάδια της ασθένειας. 
+> * Πιθανότητα επιβίωσης για άλλα 5 χρόνια δεδομένου ότι η ασθενής έχει επιβιώσει:
+  - 2 χρόνια από τη διάγνωση = 65%
+  - 4 χρόνια από τη διάγνωση = 80%
+  - 6 χρόνια από τη διάγνωση = 88%
+  - 10 χρόνια από τη διάγνωση = 93%
+  
+
+---
+
+## Δυναμική επιβίωση 
+```{r echo=F, results='asis',message=F}
+require(googleVis)
+dd <- read.table("dd.dat",header=TRUE)
+dd$time <- round(dd$time,2)
+L1 <- gvisLineChart(dd, xvar="time", yvar=c("surv25","surv45"),
+                    options=list(title = "Dynamic survival ", 
+ titleTextStyle="{color:'#3182bd', fontSize:15}",
+                                  vAxes="[{title:'5 year survival',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out', minValue:0}]",   
+                                  hAxes="[{title:'years since diagnosis',
+                             titleTextStyle: {color: '#3182bd'},
+                             textStyle:{color: '#3182bd'},
+                             textPosition: 'out'}]",
+width=750, height=480                                  
+                     ))   
+                     
+print(L1,tag= "chart")
+```
+---
+--- 
+## Ευχαριστώ
